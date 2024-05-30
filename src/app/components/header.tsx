@@ -16,12 +16,9 @@ export default function Header() {
                 <p className="font-bold text-inherit">CES&apos;Eat</p>
             </NavbarBrand>
             <NavbarContent justify="center">
-                <p>Restaurateur</p>
+                <p>Livreur</p>
             </NavbarContent>
             <NavbarContent justify="end">
-                <NavbarItem className="hidden lg:flex">
-                    <Link href="#">Statistiques</Link>
-                </NavbarItem>
                 <NavbarItem>
                     <Dropdown className="text-black">
                         <DropdownTrigger>
