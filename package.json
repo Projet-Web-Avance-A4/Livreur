@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@headlessui/react": "^2.0.4",
     "@nextui-org/button": "^2.0.31",
     "@nextui-org/card": "^2.0.28",
     "@nextui-org/dropdown": "^2.1.23",
@@ -19,7 +20,8 @@
     "framer-motion": "^11.2.6",
     "next": "14.2.3",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "react-icons": "^5.2.1"
   },
   "devDependencies": {
     "@types/node": "^20",
