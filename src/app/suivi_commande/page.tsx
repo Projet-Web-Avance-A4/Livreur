@@ -4,17 +4,24 @@ import { NextUIProvider } from "@nextui-org/system";
 import Header from "../components/header";
 import { Card, CardBody, CardHeader } from "@nextui-org/card";
 import { Button } from "@nextui-org/button";
+import Suivi from "../components/suivi";
+import Footer from "../components/footer";
 
 export default function Home() {
+  const order_status = "Commande reçu";
+
   return (
-    <NextUIProvider className="h-screen bg-beige">
-      <Header />
-      <div className="container mx-auto">
-        <Card className="m-4">
-          <CardBody>
-            <p>SUIVI PAR POINTS A FAIRE</p>
-          </CardBody>
-        </Card>
+    <NextUIProvider className="h-screen bg-beige flex flex-col">
+      <Header
+        title="Livreur"
+        showMyAccount={true}
+        showStats={false}
+        showSponsor={true}
+      />
+      <main className="container mx-auto flex-grow">
+        <div className="flex justify-center">
+          <Suivi order_status={order_status}></Suivi>
+        </div>
         <Card className="m-4">
           <CardBody>
             <p>Destination actuelle : </p>
@@ -30,18 +37,19 @@ export default function Home() {
           </CardBody>
         </Card>
         <Card className="m-4">
-          <CardBody className="flex flex-row justify-between">
-            <Button className="w-5/12">
+          <CardBody className="flex flex-col justify-between items-center">
+            <Button className="w-1/2 m-4">
               <p>Commande en Livraison</p>
               {/* Bouton désactivé si état est 'en livraison' */}
             </Button>
-            <Button className="w-5/12">
+            <Button className="w-1/2 m-4">
               <p>Commande livrée</p>
               {/* Bouton désactivé si état est 'en préparation' */}
             </Button>
           </CardBody>
         </Card>
-      </div>
+      </main>
+      <Footer/>
     </NextUIProvider>
   );
 }
