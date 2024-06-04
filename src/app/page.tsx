@@ -5,6 +5,7 @@ import Header from "./components/header";
 import Footer from "./components/footer";
 import Suivi from "./components/suivi";
 import { useState } from "react";
+import CustomTable from "./components/table";
 
 export default function Home() {
   const [order_status, setOrderStatus] = useState("Commande reçu");
@@ -19,7 +20,7 @@ export default function Home() {
       />
       <div className="container mx-auto">
         <div className="flex flex-wrap place-content-center">
-          <Suivi order_status={order_status} />
+          <CustomTable />
         </div>
       </div>
       <Footer />

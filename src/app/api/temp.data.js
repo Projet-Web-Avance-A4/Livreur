@@ -1,0 +1,140 @@
+/* EXEMPLE DE DONNEES PROVENANT DE LA BDD VIA L'API */
+const columns = [
+  {name: "Adresse du restaurateur", uid : "adresse_resto"},
+  {name: "Ville du restaurateur", uid : "ville_resto"},
+  {name: "Adresse du client", uid : "adresse_client"},
+  {name: "Ville du client", uid : "ville_client"},
+  {name: "Moyen de Paiement", uid: "payment_method", sortable: true},
+  {name: "ACTIONS", uid: "actions"},
+];
+
+const paymentOptions = [
+  {name: "Carte De Crédit", uid: "Carte De Crédit"},
+  {name: "Liquide", uid: "Liquide"},
+];
+
+const commandes = [
+  {
+    id: 1,
+    adresse_resto: "8 rue CESI",
+    ville_resto: "Lille",
+    adresse_client: "9 rue CESI",
+    ville_client: "Lille",
+    payment_method: "Carte De Crédit",
+  },
+  {
+    id: 2,
+    adresse_resto: "2 rue CESI",
+    ville_resto: "Dunkerque",
+    adresse_client: "3 rue CESI",
+    ville_client: "Dunkerque",
+    payment_method: "Carte De Crédit",
+  },
+  {
+    id: 3,
+    adresse_resto: "4 rue CESI",
+    ville_resto: "Dunkerque",
+    adresse_client: "5 rue CESI",
+    ville_client: "Lille",
+    payment_method: "Carte De Crédit",
+  },
+  {
+    id: 4,
+    adresse_resto: "6 rue CESI",
+    ville_resto: "Lille",
+    adresse_client: "7 rue CESI",
+    ville_client: "Dunkerque",
+    payment_method: "Carte De Crédit",
+  },
+  {
+    id: 5,
+    adresse_resto: "10 rue CESI",
+    ville_resto: "Lille",
+    adresse_client: "11 rue CESI",
+    ville_client: "Lille",
+    payment_method: "Carte De Crédit",
+  },
+  {
+    id: 6,
+    adresse_resto: "12 rue CESI",
+    ville_resto: "Lille",
+    adresse_client: "13 rue CESI",
+    ville_client: "Lille",
+    payment_method: "Liquide",
+  },
+  {
+    id: 7,
+    adresse_resto: "14 rue CESI",
+    ville_resto: "Grande-Synthe",
+    adresse_client: "15 rue CESI",
+    ville_client: "Amiens",
+    payment_method: "Liquide",
+  },
+  {
+    id: 8,
+    adresse_resto: "16 rue CESI",
+    ville_resto: "Petite-Synthe",
+    adresse_client: "17 rue CESI",
+    ville_client: "Coudekerque",
+    payment_method: "Liquide",
+  },
+  {
+    id: 9,
+    adresse_resto: "18 rue CESI",
+    ville_resto: "Petite-Synthe",
+    adresse_client: "19 rue CESI",
+    ville_client: "Grande-Synthe",
+    payment_method: "Liquide",
+  },
+  {
+    id: 10,
+    adresse_resto: "20 rue CESI",
+    ville_resto: "Grande-Synthe",
+    adresse_client: "21 rue CESI",
+    ville_client: "Petite-Synthe",
+    payment_method: "Liquide",
+  },
+  {
+    id: 11,
+    adresse_resto: "1 rue CESI",
+    ville_resto: "Loon-Plage",
+    adresse_client: "2 rue CESI",
+    ville_client: "Grande-Synthe",
+    payment_method: "Liquide",
+  },
+  {
+    id: 12,
+    adresse_resto: "101 rue CESI",
+    ville_resto: "Loon-Plage",
+    adresse_client: "202 rue CESI",
+    ville_client: "Fort-Mardyck",
+    payment_method: "Liquide",
+  },
+  {
+    id: 13,
+    adresse_resto: "101 rue CESI",
+    ville_resto: "Lille",
+    adresse_client: "202 rue CESI",
+    ville_client: "Fort-Mardyck",
+    payment_method: "Liquide",
+  },
+  {
+    id: 14,
+    adresse_resto: "101 rue CESI",
+    ville_resto: "Lille",
+    adresse_client: "202 rue CESI",
+    ville_client: "Lille",
+    payment_method: "Carte De Crédit",
+  },
+  {
+    id: 15,
+    adresse_resto: "101 rue CESI",
+    ville_resto: "Lille",
+    adresse_client: "202 rue CESI",
+    ville_client: "Lille",
+    payment_method: "Carte De Crédit",
+  },
+];
+
+export {columns, commandes, paymentOptions};
+
