@@ -3,8 +3,8 @@ import { Button } from '@nextui-org/button';
 import { Card, CardBody, CardHeader, Input, Spacer } from '@nextui-org/react';
 import { NextUIProvider } from '@nextui-org/system';
 import React, { useEffect, useState } from 'react';
-import { EyeSlashFilledIcon } from '../../../public/EyeSlashFilledIcon';
-import { EyeFilledIcon } from '../../../public/EyeFilledIcon';
+import { EyeSlashFilledIcon } from '../../../../public/EyeSlashFilledIcon';
+import { EyeFilledIcon } from '../../../../public/EyeFilledIcon';
 import { FaUser } from "react-icons/fa6";
 
 const ConnectionForm: React.FC<{ changeForm: () => void }> = (props) => {
@@ -25,7 +25,7 @@ const ConnectionForm: React.FC<{ changeForm: () => void }> = (props) => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const response = await fetch('http://localhost:3001/api/login', {
+            const response = await fetch('http://localhost:3001/api/auth/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

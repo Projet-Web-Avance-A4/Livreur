@@ -1,64 +1,35 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import Header from "../components/header";
+import Header from "../components/header/header";
 import { NextUIProvider } from "@nextui-org/system";
-import CustomCard from '../components/customcard';
-import Footer from '../components/footer';
-import jwt, { JwtPayload } from 'jsonwebtoken';
-
-interface User {
-  name: string;
-  surname: string;
-  street: string;
-  city: string;
-  postal_code: string;
-  phone: string;
-  mail: string;
-  role: string;
-}
+import CustomCard from '../components/customcard/customcard';
+import Footer from '../components/footer/footer';
+import { User } from "../interfaces/user";
+import { decodeAccessToken, fetchDownloadableFiles } from './utils';
 
 const DownloadComponentsPage: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
   const [files, setFiles] = useState<any[]>([]);
 
   useEffect(() => {
-    fetch('/api/components')
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      })
-      .then(data => {
-        if (Array.isArray(data.downloadableFiles)) {
-          setFiles(data.downloadableFiles);
-        } else {
-          throw new Error('Response data is not an array');
-        }
-      })
-      .catch(error => console.error('Error fetching files:', error));
+    const fetchFiles = async () => {
+      try {
+        const filesData = await fetchDownloadableFiles();
+        setFiles(filesData);
+      } catch (error) {
+        console.error('Error fetching files:', error);
+      }
+    };
+
+    fetchFiles();
   }, []);
 
   useEffect(() => {
     const accessToken = localStorage.getItem('accessToken');
-    if (accessToken) {
-      const decodedToken = jwt.decode(accessToken);
-      if (decodedToken && typeof decodedToken !== 'string') {
-        const data: JwtPayload = decodedToken;
-        const userData: User = {
-          name: data.name ?? '',
-          surname: data.surname ?? '',
-          street: data.street ?? '',
-          city: data.city ?? '',
-          postal_code: data.postal_code ?? '',
-          phone: data.phone ?? '',
-          mail: data.mail ?? '',
-          role: data.role ?? ''
-        };
-        setUser(userData);
-      }
-
+    const userData = decodeAccessToken(accessToken);
+    if (userData) {
+      setUser(userData);
     }
   }, []);
 

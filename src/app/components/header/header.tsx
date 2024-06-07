@@ -10,9 +10,9 @@ import { Button } from "@nextui-org/button";
 import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, DropdownSection } from "@nextui-org/react";
 import Link from "next/link";
 import React, { useState } from 'react';
-import DeleteUserModal from "./deleteUserModal";
+import DeleteUserModal from "../deleteUserModal/deleteUserModal";
 import Image from 'next/image';
-import ceseat from "../../../public/logo-ceseat.png";
+import ceseat from "../../../../public/logo-ceseat.png";
 
 interface User {
     name: string;

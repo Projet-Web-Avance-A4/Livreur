@@ -3,8 +3,8 @@
 import React, { useEffect, useState } from 'react';
 import { Alert } from '@mui/material';
 import { Input, Spacer, Button, Card, CardHeader, CardBody, Tooltip } from '@nextui-org/react';
-import { EyeFilledIcon } from "../../../public/EyeFilledIcon";
-import { EyeSlashFilledIcon } from "../../../public/EyeSlashFilledIcon";
+import { EyeFilledIcon } from "../../../../public/EyeFilledIcon";
+import { EyeSlashFilledIcon } from "../../../../public/EyeSlashFilledIcon";
 import { FaUserPlus, FaReply } from "react-icons/fa6";
 import { NextUIProvider } from '@nextui-org/system';
 
@@ -40,7 +40,7 @@ const RegisterForm: React.FC<{ changeForm: () => void }> = (props) => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        const response = await fetch('http://localhost:3001/api/register', {
+        const response = await fetch('http://localhost:3001/api/auth/register', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
