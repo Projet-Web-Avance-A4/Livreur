@@ -2,13 +2,7 @@ import { Button } from "@nextui-org/button";
 import { NextUIProvider } from "@nextui-org/react";
 import { Card, CardBody, CardHeader } from "@nextui-org/card";
 import Link from "next/link";
-
-interface iCustomCard {
-  title: string
-  description?: string
-  href: string
-  btnText: string
-}
+import { iCustomCard } from "@/app/interfaces/card";
 
 export default function CustomCard(props: iCustomCard) {
   return (

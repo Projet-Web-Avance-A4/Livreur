@@ -19,3 +19,9 @@ export const fieldLabels: { [key in keyof User]: string } = {
     mail: 'Mail',
     role: 'Rôle'
 };
+
+export interface deleteUserModalProps {
+    isOpen: boolean;
+    closeModal: () => void;
+    userMail?: string;
+}
