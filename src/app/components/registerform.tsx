@@ -40,7 +40,7 @@ const RegisterForm: React.FC<{ changeForm: () => void }> = (props) => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        const response = await fetch('http://localhost:3001/api/register', {
+        const response = await fetch('http://localhost:3001/api/auth/register', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
