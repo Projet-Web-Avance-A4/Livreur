@@ -20,9 +20,9 @@ import {
     SortDescriptor,
     Tooltip
 } from "@nextui-org/react";
-import { FaPlus, FaCircleDot, FaChevronDown, FaMagnifyingGlass, FaRegTrashCan, FaPencil } from "react-icons/fa6"
-import { columns, users, statusOptions } from "../api/temp.data";
-import { capitalize } from "../utils/capitalize";
+import { FaPlus, FaChevronDown, FaMagnifyingGlass, FaRegTrashCan, FaPencil } from "react-icons/fa6"
+import { columns, users, statusOptions } from "../../api/temp.data";
+import { capitalize } from "./utils";
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
     active: "success",
