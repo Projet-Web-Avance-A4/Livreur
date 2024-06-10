@@ -15,25 +15,6 @@ import Image from 'next/image';
 import ceseat from "../../../../public/images/logo-ceseat.png";
 import { iHeader } from "@/app/interfaces/header";
 import { useModal } from './utils';
-import { useState } from 'react';
-
-interface User {
-    name: string;
-    surname: string;
-    street: string;
-    city: string;
-    postal_code: string;
-    phone: string;
-    mail: string;
-    role: string;
-}
-
-interface Header {
-    user?: User | null;
-    title?: string;
-    showMyAccount?: boolean;
-    showStats?: boolean;
-}
 
 export default function Header(props: iHeader) {
 
