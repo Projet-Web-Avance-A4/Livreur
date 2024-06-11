@@ -47,7 +47,7 @@ export const isUserDataValid = (user: User | null) => {
 };
 
 export const handleTokenVerification = (setUser: (user: User) => void) => {
-    let accessToken: string | null = localStorage.getItem('accessToken');
+    let accessToken = localStorage.getItem('accessToken');
     const refreshToken = localStorage.getItem('refreshToken');
 
     if (!accessToken) {
@@ -103,33 +103,46 @@ export const sendModifiedData = async (
     user: User | null,
     setUser: React.Dispatch<React.SetStateAction<User | null>>
 ) => {
-    try {
-        const response = await fetch('http://localhost:4000/auth/update', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                name: modifiedUser?.name,
-                surname: modifiedUser?.surname,
-                currentMail: user?.mail,
-                newMail: modifiedUser?.mail,
-                phone: modifiedUser?.phone,
-                street: modifiedUser?.street,
-                city: modifiedUser?.city,
-                postalCode: modifiedUser?.postal_code
-            })
-        });
-        if (!response.ok) {
-            throw new Error('Failed to modify data');
-        }
+    const activeAccessToken = localStorage.getItem('accessToken');
+    const activeRefreshToken = localStorage.getItem('refreshToken');
+    let index: number = 0;
+    let tokenStatus: string = '';
+    while (index < 10 || tokenStatus == 'OK') {
+        try {
+            const response = await fetch('http://localhost:4000/auth/update', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${activeAccessToken}`
+                },
+                body: JSON.stringify({
+                    name: modifiedUser?.name,
+                    surname: modifiedUser?.surname,
+                    currentMail: user?.mail,
+                    newMail: modifiedUser?.mail,
+                    phone: modifiedUser?.phone,
+                    street: modifiedUser?.street,
+                    city: modifiedUser?.city,
+                    postalCode: modifiedUser?.postal_code
+                })
+            });
 
-        const { accessToken, refreshToken } = await response.json();
-        localStorage.setItem('accessToken', accessToken);
-        localStorage.setItem('refreshToken', refreshToken);
-        verifyAndSetUser(accessToken, setUser);
-    } catch (error) {
-        console.error('Failed to modify data:', error);
+            const { accessToken, refreshToken, message } = await response.json();
+            localStorage.setItem('accessToken', accessToken);
+            localStorage.setItem('refreshToken', refreshToken);
+            tokenStatus = message;
+            verifyAndSetUser(accessToken, setUser);
+        } catch (error: any) {
+            tokenStatus = error.message;
+            index++;
+            if (error.message == 'Token expiré') {
+                if (activeRefreshToken) {
+                    generateNewAccessToken(activeRefreshToken);
+                }
+            } else {
+                console.error('Failed to modify data:', error);
+            }
+        }
     }
 };
 
@@ -142,23 +155,27 @@ export const sendModifiedPassword = async (
     setAlertType: React.Dispatch<React.SetStateAction<'success' | 'error'>>
 ) => {
     if (newPassword === confirmPassword) {
-        try {
-            const response = await fetch('http://localhost:4000/auth/update-password', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ mail: user?.mail, oldPassword, newPassword })
-            });
-            if (!response.ok) {
-                setAlertMessage('Échec de la modification de mot de passe');
-                setAlertType('error');
-            } else {
-                setAlertMessage('Modification du mot de passe réussie');
-                setAlertType('success');
+        let index: number = 0;
+        let tokenStatus: string = '';
+        while (index < 10 || tokenStatus == 'OK') {
+            try {
+                const response = await fetch('http://localhost:4000/auth/update-password', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ mail: user?.mail, oldPassword, newPassword })
+                });
+                if (!response.ok) {
+                    setAlertMessage('Échec de la modification de mot de passe');
+                    setAlertType('error');
+                } else {
+                    setAlertMessage('Modification du mot de passe réussie');
+                    setAlertType('success');
+                }
+            } catch (error) {
+                console.error('Failed to modify password:', error);
             }
-        } catch (error) {
-            console.error('Failed to modify password:', error);
         }
     } else {
         console.error('Erreur de modification, veuillez réitérer');
