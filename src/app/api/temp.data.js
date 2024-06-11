@@ -1,140 +1,62 @@
-/* EXEMPLE DE DONNEES PROVENANT DE LA BDD VIA L'API */
-const columns = [
-  {name: "Adresse du restaurateur", uid : "adresse_resto"},
-  {name: "Ville du restaurateur", uid : "ville_resto"},
-  {name: "Adresse du client", uid : "adresse_client"},
-  {name: "Ville du client", uid : "ville_client"},
-  {name: "Moyen de Paiement", uid: "payment_method", sortable: true},
-  {name: "ACTIONS", uid: "actions"},
-];
+const data = [{
+  "order_id": 1,
+  "customer": {
+    "customer_id": 1,
+    "name": "Smail Benali",
+    "phone": "+33123456789",
+    "email": "smail.benali@viacesi.fr",
+    "address": {
+      "street": "10 rue de CESI",
+      "city": "Lille",
+      "postal_code": "59800",
+      "country": "France"
+    }
+  },
+  "restaurant": {
+    "restaurant_id": 1,
+    "name": "Au Bon Réseau",
+    "phone": "+33198765432",
+    "address": {
+      "street": "12 rue de CESI",
+      "city": "Lille",
+      "postal_code": "59800",
+      "country": "France"
+    }
+  },
+  "items": [
+    {
+      "menu_id": 10,
+      "name": "Bus chez SFR",
+      "price": 12.50
+    },
+    {
+      "drink_id": 11,
+      "name": "Café",
+      "price": 2.00
+    },
+    {
+      "dessert_id": 12,
+      "name": "Définition du temps",
+      "price": 2.50
+    }
+  ],
+  "total_price": 17.00,
+  "order_status": "in_progress",
+  "verification_code": "123456",
+  "estimated_delivery_time": "2024-05-23T19:45:00Z",
+  "payment": {
+    "method": "credit_card",
+    "transaction_id": "tx_1234567890",
+    "amount": 17.00,
+    "currency": "EUR",
+    "payment_time": "2024-05-23T19:10:00Z"
+  },
+  "driver": {
+    "driver_id": 14,
+    "name": "Hugo Corso",
+    "phone": "+33111223344",
+    "vehicle": "Voiture"
+  }
+}]
 
-const paymentOptions = [
-  {name: "Carte De Crédit", uid: "Carte De Crédit"},
-  {name: "Liquide", uid: "Liquide"},
-];
-
-const commandes = [
-  {
-    id: 1,
-    adresse_resto: "8 rue CESI",
-    ville_resto: "Lille",
-    adresse_client: "9 rue CESI",
-    ville_client: "Lille",
-    payment_method: "Carte De Crédit",
-  },
-  {
-    id: 2,
-    adresse_resto: "2 rue CESI",
-    ville_resto: "Dunkerque",
-    adresse_client: "3 rue CESI",
-    ville_client: "Dunkerque",
-    payment_method: "Carte De Crédit",
-  },
-  {
-    id: 3,
-    adresse_resto: "4 rue CESI",
-    ville_resto: "Dunkerque",
-    adresse_client: "5 rue CESI",
-    ville_client: "Lille",
-    payment_method: "Carte De Crédit",
-  },
-  {
-    id: 4,
-    adresse_resto: "6 rue CESI",
-    ville_resto: "Lille",
-    adresse_client: "7 rue CESI",
-    ville_client: "Dunkerque",
-    payment_method: "Carte De Crédit",
-  },
-  {
-    id: 5,
-    adresse_resto: "10 rue CESI",
-    ville_resto: "Lille",
-    adresse_client: "11 rue CESI",
-    ville_client: "Lille",
-    payment_method: "Carte De Crédit",
-  },
-  {
-    id: 6,
-    adresse_resto: "12 rue CESI",
-    ville_resto: "Lille",
-    adresse_client: "13 rue CESI",
-    ville_client: "Lille",
-    payment_method: "Liquide",
-  },
-  {
-    id: 7,
-    adresse_resto: "14 rue CESI",
-    ville_resto: "Grande-Synthe",
-    adresse_client: "15 rue CESI",
-    ville_client: "Amiens",
-    payment_method: "Liquide",
-  },
-  {
-    id: 8,
-    adresse_resto: "16 rue CESI",
-    ville_resto: "Petite-Synthe",
-    adresse_client: "17 rue CESI",
-    ville_client: "Coudekerque",
-    payment_method: "Liquide",
-  },
-  {
-    id: 9,
-    adresse_resto: "18 rue CESI",
-    ville_resto: "Petite-Synthe",
-    adresse_client: "19 rue CESI",
-    ville_client: "Grande-Synthe",
-    payment_method: "Liquide",
-  },
-  {
-    id: 10,
-    adresse_resto: "20 rue CESI",
-    ville_resto: "Grande-Synthe",
-    adresse_client: "21 rue CESI",
-    ville_client: "Petite-Synthe",
-    payment_method: "Liquide",
-  },
-  {
-    id: 11,
-    adresse_resto: "1 rue CESI",
-    ville_resto: "Loon-Plage",
-    adresse_client: "2 rue CESI",
-    ville_client: "Grande-Synthe",
-    payment_method: "Liquide",
-  },
-  {
-    id: 12,
-    adresse_resto: "101 rue CESI",
-    ville_resto: "Loon-Plage",
-    adresse_client: "202 rue CESI",
-    ville_client: "Fort-Mardyck",
-    payment_method: "Liquide",
-  },
-  {
-    id: 13,
-    adresse_resto: "101 rue CESI",
-    ville_resto: "Lille",
-    adresse_client: "202 rue CESI",
-    ville_client: "Fort-Mardyck",
-    payment_method: "Liquide",
-  },
-  {
-    id: 14,
-    adresse_resto: "101 rue CESI",
-    ville_resto: "Lille",
-    adresse_client: "202 rue CESI",
-    ville_client: "Lille",
-    payment_method: "Carte De Crédit",
-  },
-  {
-    id: 15,
-    adresse_resto: "101 rue CESI",
-    ville_resto: "Lille",
-    adresse_client: "202 rue CESI",
-    ville_client: "Lille",
-    payment_method: "Carte De Crédit",
-  },
-];
-
-export {columns, commandes, paymentOptions};
-
+export {data};
