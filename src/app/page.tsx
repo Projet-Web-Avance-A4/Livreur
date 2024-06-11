@@ -1,29 +1,38 @@
 "use client";
 
-import { NextUIProvider } from "@nextui-org/system";
-import Header from "./components/header";
-import Footer from "./components/footer";
-import Suivi from "./components/suivi";
-import { useState } from "react";
-import CustomTable from "./components/table";
+import React, { useState } from 'react';
+import RegisterForm from './components/registerForm/registerForm';
+import ConnectionForm from './components/connectionForm/connectionForm';
+import { NextUIProvider } from '@nextui-org/system';
+import Header from './components/header/header';
+import Footer from './components/footer/footer';
 
-export default function Home() {
-  const [order_status, setOrderStatus] = useState("Commande reçu");
+const Register: React.FC = () => {
 
-  return (
-    <NextUIProvider className="h-screen bg-beige">
-      <Header
-        title="Livreur"
-        showMyAccount={true}
-        showStats={false}
-        showSponsor={true}
-      />
-      <div className="container mx-auto">
-        <div className="flex flex-wrap place-content-center">
-          <CustomTable />
-        </div>
-      </div>
-      <Footer />
-    </NextUIProvider>
-  );
-}
+    const [connectPage, setConnectPage] = useState<boolean>(true)
+
+    const changeForm = () => {
+        setConnectPage(!connectPage)
+    }
+
+    return (
+        <NextUIProvider className="flex flex-col min-h-screen bg-beige">
+            <Header title={"Commercial"} />
+            <div className='container mx-auto mt-6 flex-grow'>
+                {!connectPage &&
+                    <div>
+                        <RegisterForm changeForm={changeForm} />
+                    </div>
+                }
+                {connectPage &&
+                    <div>
+                        <ConnectionForm changeForm={changeForm} />
+                    </div>
+                }
+            </div>
+            <Footer />
+        </NextUIProvider>
+    );
+};
+
+export default Register;
