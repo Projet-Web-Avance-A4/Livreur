@@ -103,11 +103,12 @@ export const sendModifiedData = async (
     user: User | null,
     setUser: React.Dispatch<React.SetStateAction<User | null>>
 ) => {
-    const activeAccessToken = localStorage.getItem('accessToken');
+    let activeAccessToken = localStorage.getItem('accessToken');
     const activeRefreshToken = localStorage.getItem('refreshToken');
-    let index: number = 0;
-    let tokenStatus: string = '';
-    while (index < 10 || tokenStatus == 'OK') {
+    let index = 0;
+    let tokenStatus = '';
+
+    while (index < 10 && tokenStatus !== 'OK') {
         try {
             const response = await fetch('http://localhost:4000/auth/update', {
                 method: 'POST',
@@ -127,20 +128,31 @@ export const sendModifiedData = async (
                 })
             });
 
+            if (!response.ok) {
+                const errorData = await response.json();
+                if (errorData.message === 'Token expiré') {
+                    if (activeRefreshToken) {
+                        await generateNewAccessToken(activeRefreshToken);
+                        activeAccessToken = localStorage.getItem('accessToken');
+                        continue;
+                    }
+                } else {
+                    throw new Error(errorData.message);
+                }
+            }
+
             const { accessToken, refreshToken, message } = await response.json();
             localStorage.setItem('accessToken', accessToken);
             localStorage.setItem('refreshToken', refreshToken);
             tokenStatus = message;
             verifyAndSetUser(accessToken, setUser);
+            break;
+
         } catch (error: any) {
             tokenStatus = error.message;
             index++;
-            if (error.message == 'Token expiré') {
-                if (activeRefreshToken) {
-                    generateNewAccessToken(activeRefreshToken);
-                }
-            } else {
-                console.error('Failed to modify data:', error);
+            if (index >= 10) {
+                console.error('Max retry limit reached:', error);
             }
         }
     }
