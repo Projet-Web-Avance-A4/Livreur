@@ -1,11 +1,11 @@
 "use client";
 
 import { NextUIProvider } from "@nextui-org/system";
-import Header from "../components/header";
+import Header from "../components/header/header";
 import { Card, CardBody, CardHeader } from "@nextui-org/card";
 import { Button } from "@nextui-org/button";
 import Suivi from "../components/suivi";
-import Footer from "../components/footer";
+import Footer from "../components/footer/footer";
 
 export default function Home() {
   const order_status = "Commande reçu";
@@ -16,7 +16,6 @@ export default function Home() {
         title="Livreur"
         showMyAccount={true}
         showStats={false}
-        showSponsor={true}
       />
       <main className="container mx-auto flex-grow">
         <div className="flex justify-center">

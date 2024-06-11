@@ -1,9 +1,9 @@
 "use client";
 
 import { NextUIProvider } from "@nextui-org/system";
-import Header from "../components/header";
+import Header from "../components/header/header";
 import CommandeCard from "../components/commandecard";
-import Footer from "../components/footer";
+import Footer from "../components/footer/footer";
 import CustomTable from "../components/table";
 
 export default function Home() {
@@ -13,7 +13,6 @@ export default function Home() {
         title="Livreur"
         showMyAccount={true}
         showStats={false}
-        showSponsor={true}
       />
       <main className="container mx-auto  flex-grow">
         <CustomTable/>
