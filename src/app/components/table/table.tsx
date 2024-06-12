@@ -14,15 +14,13 @@ import {
   DropdownItem,
   Pagination,
   Selection,
-  ChipProps,
   SortDescriptor,
-  Tooltip,
 } from "@nextui-org/react";
 import { FaChevronDown, FaMagnifyingGlass, FaCheck } from "react-icons/fa6";
 import { propsTable } from "@/app/interfaces/table";
 /* import parse from "html-react-parser"; */
 
-export default function App(props: propsTable) {
+export default function CustomTable ({props, actionButtons} : {props: propsTable, actionButtons: any}) {
   const [filterValue, setFilterValue] = React.useState("");
   const [selectedKeys, setSelectedKeys] = React.useState<Selection>(
     new Set([])
@@ -110,14 +108,10 @@ export default function App(props: propsTable) {
       switch (columnKey) {
         case "actions":
           return (
-              /* parse(props.options.action_code, */
-                // {library: require("react-icons/fa6"), }
-            <div className="relative flex justify-end items-center gap-2">
-              <Tooltip className="text-black" content="Valider">
-                <Button isIconOnly radius="full" size="sm" variant="light">
-                  <FaCheck className="text-default-400 fill-green-500" />
-                </Button>
-              </Tooltip>
+            <div className="flex flex-row	justify-end">
+              {actionButtons.map((actionButton: any) => {
+                return actionButton()
+              })}
             </div>
           );
         default:

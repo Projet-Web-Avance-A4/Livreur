@@ -3,11 +3,13 @@
 import { NextUIProvider } from "@nextui-org/system";
 import Header from "../components/header/header";
 import Footer from "../components/footer/footer";
-import Table from "../components/table/table";
+import CustomTable from "../components/table/table";
 import { data } from "../api/temp.data";
-import { Card, CardBody, CardHeader, SelectionMode } from "@nextui-org/react";
+import { Card, CardBody, CardHeader } from "@nextui-org/react";
 import { FaBoxesStacked } from "react-icons/fa6";
 import { Options } from "../interfaces/table";
+import { propsTable } from "@/app/interfaces/table";
+import ActionButtonValidationOrder from "../components/actionButtonTable/actionButtonValidationOrder"
 
 const INITIAL_VISIBLE_COLUMNS = [
   "adresse_resto",
@@ -41,13 +43,22 @@ const options: Options = {
   search_name: "Chercher par ville", //Titre de la barre de recherche
   search_uid: ["ville_resto", "ville_client"], //uid des colonnes à filtrer
   selection_mode: "none", //"none", "single" ou "multiple"
-  option_name: "Moyen de paiement",
-  option_uid: "payment_method",
+  option_name: "Moyen de paiement", //Name of the option filter
+  option_uid: "payment_method", //uid of the column filtered with the option
   value_option: [
     { name: "Carte de crédit", uid: "Carte de crédit" }, // uid need to be exactly the same as item's value. Name is the string to be printed
     { name: "Liquide", uid: "Liquide" },
   ],
 };
+
+const props: propsTable = {
+  columns: columns,
+  options: options,
+  items: items,
+  INITIAL_VISIBLE_COLUMNS: INITIAL_VISIBLE_COLUMNS,
+}
+
+
 
 export default function Home() {
   return (
@@ -63,12 +74,10 @@ export default function Home() {
             <h4 className="flex items-center font-bold text-large gap-2"><FaBoxesStacked />Commandes disponibles</h4>
           </CardHeader>
           <CardBody>
-            <Table
-              columns={columns}
-              options={options}
-              items={items}
-              INITIAL_VISIBLE_COLUMNS={INITIAL_VISIBLE_COLUMNS}
-            />
+            <CustomTable
+              props={props}
+              actionButtons={[ActionButtonValidationOrder, ActionButtonValidationOrder]}
+              />
           </CardBody>
         </Card>
       </main>
