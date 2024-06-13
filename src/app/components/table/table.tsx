@@ -15,12 +15,19 @@ import {
   Pagination,
   Selection,
   SortDescriptor,
+  Tooltip,
 } from "@nextui-org/react";
 import { FaChevronDown, FaMagnifyingGlass, FaCheck } from "react-icons/fa6";
 import { propsTable } from "@/app/interfaces/table";
 /* import parse from "html-react-parser"; */
 
-export default function CustomTable ({props, actionButtons} : {props: propsTable, actionButtons: any}) {
+export default function CustomTable({
+  props,
+  actionButtons,
+}: {
+  props: propsTable;
+  actionButtons: any;
+}) {
   const [filterValue, setFilterValue] = React.useState("");
   const [selectedKeys, setSelectedKeys] = React.useState<Selection>(
     new Set([])
@@ -53,15 +60,6 @@ export default function CustomTable ({props, actionButtons} : {props: propsTable
     let filteredOrders = [...props.items];
 
     if (hasSearchFilter) {
-      // filteredOrders = filteredOrders.filter(
-      //   (items) =>
-      //     items
-      //       .ville_client!.toLowerCase()
-      //       .includes(filterValue.toLowerCase()) ||
-      //     items
-      //       .ville_resto!.toLowerCase()
-      //       .includes(filterValue.toLowerCase())
-      // );
       filteredOrders = filteredOrders.filter(function (e) {
         return props.options.search_uid.some(function (a) {
           return e[a].toLowerCase().includes(filterValue.toLowerCase());
@@ -110,7 +108,7 @@ export default function CustomTable ({props, actionButtons} : {props: propsTable
           return (
             <div className="flex flex-row	justify-end">
               {actionButtons.map((actionButton: any) => {
-                return actionButton()
+                return actionButton(items);
               })}
             </div>
           );
@@ -180,10 +178,7 @@ export default function CustomTable ({props, actionButtons} : {props: propsTable
                 onSelectionChange={setOptionFilter}
               >
                 {props.options.value_option.map((option: any) => (
-                  <DropdownItem
-                    key={option.uid}
-                    className="text-black"
-                  >
+                  <DropdownItem key={option.uid} className="text-black">
                     {option.name}
                   </DropdownItem>
                 ))}
