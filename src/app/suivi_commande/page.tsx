@@ -4,7 +4,7 @@ import { NextUIProvider } from "@nextui-org/system";
 import Header from "../components/header/header";
 import { Card, CardBody, CardHeader } from "@nextui-org/card";
 import { Button } from "@nextui-org/button";
-import Suivi from "../components/suivi";
+import Suivi from "../components/suivi/suivi";
 import Footer from "../components/footer/footer";
 
 export default function Home() {
