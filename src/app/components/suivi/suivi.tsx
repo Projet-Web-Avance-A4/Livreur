@@ -10,7 +10,7 @@ import {
 } from "react-icons/fa6";
 
 interface Suivi {
-  order_status: string;
+  order_status?: string;
 }
 
 // Composant Card
@@ -26,17 +26,17 @@ export default function Suivi(props: Suivi) {
 
         <div
           className={`m-0.5 ${
-            props.order_status !== "Commande reçu" ? "bg-green-500" : "bg-red"
+            props.order_status !== "Commande reçue" ? "bg-green-500" : "bg-red"
           } size-4 rounded-full`}
         ></div>
         <div
           className={`m-0.5 ${
-            props.order_status !== "Commande reçu" ? "bg-green-500" : "bg-red"
+            props.order_status !== "Commande reçue" ? "bg-green-500" : "bg-red"
           } size-4 rounded-full`}
         ></div>
         <div
           className={`m-0.5 ${
-            props.order_status !== "Commande reçu" ? "bg-green-500" : "bg-red"
+            props.order_status !== "Commande reçue" ? "bg-green-500" : "bg-red"
           } size-4 rounded-full`}
         ></div>
 
@@ -45,7 +45,7 @@ export default function Suivi(props: Suivi) {
         >
           <FaFireBurner
             className={`${
-              props.order_status !== "Commande reçu" ? "fill-green-500" : "fill-red"
+              props.order_status !== "Commande reçue" ? "fill-green-500" : "fill-red"
             } size-12`}
           />
         </div>

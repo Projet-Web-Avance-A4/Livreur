@@ -11,11 +11,16 @@ import { propsTable } from "@/app/interfaces/table";
 import ActionButtonValidationOrder from "../components/actionButtonTable/actionButtonValidationOrder";
 import { useEffect, useState } from "react";
 import { Order } from "../types/order";
+import jwt, { JwtPayload } from "jsonwebtoken";
+import MoonLoader from "react-spinners/MoonLoader";
 
 export default function Home() {
   const [ordersList, setOrdersList] = useState<Order[]>([]);
+  const [assignedOrder, setAssignedOrder] = useState<Order[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const accessToken = localStorage.getItem('accessToken')
+  const decoded: JwtPayload = jwt.verify(accessToken!, 'access_secret_jwt') as JwtPayload;
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -30,13 +35,18 @@ export default function Home() {
           }
         );
         const data = await response.json();
-        // console.log(data);
         const filteredOrders = data.filter(
           (order: Order) =>
             (order.order_status === "En cours de préparation" || order.order_status === "Commande reçue") &&
             order.driver.driver_id === null
         );
         setOrdersList(filteredOrders);
+        const assignedOrder = data.filter(
+          (order: Order) =>
+            (order.order_status === "En cours de préparation" || order.order_status === "Commande reçue") &&
+            order.driver.driver_id === decoded.userId
+        );
+        setAssignedOrder(assignedOrder)
       } catch (err) {
         console.error(err);
         setError("Failed to fetch orders.");
@@ -94,6 +104,29 @@ export default function Home() {
     <NextUIProvider className="h-screen bg-beige flex flex-col">
       <Header title="Livreur" showMyAccount={true} showStats={false} />
       <main className="container mx-auto flex-grow">
+
+      {loading && 
+      <div className="flex justify-center m-14">
+        <MoonLoader
+        // color={blue}
+        loading={true}
+        // cssOverride={override}
+        size={150}
+        aria-label="Loading Spinner"
+        data-testid="loader"
+      />
+      </div>
+      }
+
+    {assignedOrder.length && !loading &&
+        <Card className="m-8">
+          <CardBody className="text-black flex items-center">
+            <p>Vous avez déjà une commande à réaliser</p> 
+          </CardBody>
+        </Card>}
+
+
+    {!assignedOrder.length && !loading &&
         <Card className="m-8">
           <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
             <h4 className="flex items-center font-bold text-large gap-2">
@@ -108,10 +141,7 @@ export default function Home() {
             />
           </CardBody>
         </Card>
-        {/* <ConfirmOrderModal
-          isOpen={isConfirmOrderModalOpen}
-          closeModal={closeConfirmOrderModal}
-        /> */}
+    }
       </main>
       <Footer />
     </NextUIProvider>
