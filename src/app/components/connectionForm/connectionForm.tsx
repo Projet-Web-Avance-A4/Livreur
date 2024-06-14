@@ -13,11 +13,24 @@ const ConnectionForm: React.FC<{ changeForm: () => void }> = (props) => {
     const [password, setPassword] = useState('');
     const [alertMessage, setAlertMessage] = useState('');
     const [alertType, setAlertType] = useState<'success' | 'error'>('success');
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const { isVisible, toggleVisibility } = useToggleVisibility();
-    const isDisabled = useFormValidation(mail, password);
+    const isDisabled = useFormValidation(mail, password) || isSubmitting;
 
-    const onSubmit = (e: React.FormEvent) => handleSubmit(e, mail, password, setAlertMessage, setAlertType);
+    const onSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setIsSubmitting(true);
+        try {
+            await handleSubmit(e, mail, password, setAlertMessage, setAlertType);
+        } catch (error) {
+            console.error(error);
+            setAlertType('error');
+            setAlertMessage('Erreur lors de la connexion.');
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
 
     return (
         <NextUIProvider>
@@ -66,15 +79,17 @@ const ConnectionForm: React.FC<{ changeForm: () => void }> = (props) => {
                             <Spacer y={1.5} />
                             <div className="grid grid-cols-1 md:flex md:flex-col md:space-y-4">
                                 <div className="col-span-1 justify-self-center">
-                                    <Button type="submit" disabled={isDisabled} className="w-full">Se connecter</Button>
+                                    <Button type="submit" isDisabled={isDisabled} className="w-full bg-beige shadow min-w-[150px]">
+                                        {isSubmitting ? 'Connexion en cours...' : 'Se connecter'}
+                                    </Button>
                                 </div>
                                 <div className="col-span-1 justify-self-center">
-                                    <Button type="button" variant='ghost' onClick={props.changeForm} className="w-full">Créer un compte</Button>
+                                    <Button type="button" variant='ghost' onClick={props.changeForm} className="w-full">
+                                        Créer un compte
+                                    </Button>
                                 </div>
                             </div>
-
                         </form>
-
                     </CardBody>
                     {alertMessage && (
                         <div>

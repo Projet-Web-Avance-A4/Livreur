@@ -166,7 +166,7 @@ const RegisterForm: React.FC<{ changeForm: () => void }> = (props) => {
                             </div>
                             <Spacer y={1.5} />
                             <div className='col-start-3 col-end-5 justify-self-center'>
-                                <Button type="submit" disabled={isDisabled}>Créer le compte</Button>
+                                <Button type="submit" className='bg-beige shadow min-w-[150px]' isDisabled={isDisabled}>Créer le compte</Button>
                             </div>
                         </form>
                     </CardBody>

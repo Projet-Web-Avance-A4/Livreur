@@ -84,6 +84,28 @@ const DownloadComponentsPage: React.FC = () => {
     } finally {
       setIsDownloading(false);
       setModalVisible(false);
+      try {
+        if (user) {
+          const response = await fetch('http://localhost:4000/log/createLog', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              name: `${user.name} ${user.surname}`,
+              mail: user.mail,
+              role: user.role,
+              type: `Téléchargement de ${selectedFolder}`,
+              timestamp: new Date().toISOString()
+            })
+          });
+          if (!response.ok) {
+            console.error('Failed to create log:', await response.text());
+          }
+        }
+      } catch (error) {
+        console.error('Failed to create log:', error);
+      }
     }
   };
 
