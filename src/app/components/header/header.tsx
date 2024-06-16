@@ -1,5 +1,6 @@
 'use client';
 
+import React from 'react';
 import {
     Navbar,
     NavbarBrand,
@@ -9,40 +10,42 @@ import {
 import { Button } from "@nextui-org/button";
 import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, DropdownSection } from "@nextui-org/react";
 import Link from "next/link";
-import React from 'react';
-import DeleteUserModal from "../deleteUserModal/deleteUserModal";
 import Image from 'next/image';
 import ceseat from "../../../../public/images/logo-ceseat.png";
-import { iHeader } from "@/app/interfaces/header";
+import DeleteUserModal from "../deleteUserModal/deleteUserModal";
 import { useModal } from './utils';
+import { useHeader } from '../../hooks/useHeader';
 
-export default function Header(props: iHeader) {
+export default function Header() {
+    const { user, showMyAccount, showStats } = useHeader();
     const { isModalOpen, openModal, closeModal } = useModal();
 
     return (
         <Navbar className="bg-red">
             <NavbarBrand>
-                <Link href={"/"}><p className="font-bold text-inherit ml-2 text-large flex items-center gap-2">
-                    <Image
-                        src={ceseat}
-                        width={50}
-                        height={50}
-                        alt="Logo Ceseat"
-                    />
-                    CES&apos;Eat</p>
+                <Link href={"/"}>
+                    <p className="font-bold text-inherit ml-2 text-large flex items-center gap-2">
+                        <Image
+                            src={ceseat}
+                            width={50}
+                            height={50}
+                            alt="Logo Ceseat"
+                        />
+                        CES&apos;Eat
+                    </p>
                 </Link>
             </NavbarBrand>
             <NavbarContent justify="center">
-                <p>{props.user?.role || props.title}</p>
+                <p>{user?.role || "CES'Eat"}</p>
             </NavbarContent>
             <NavbarContent justify="end">
-                {props.showStats && props.user?.role == 'Restaurateur' &&
+                {showStats && user?.role === 'Restaurateur' &&
                     <NavbarItem className="hidden lg:flex">
                         <Link href="#">Statistiques</Link>
                     </NavbarItem>
                 }
                 <NavbarItem>
-                    {props.showMyAccount &&
+                    {showMyAccount &&
                         <Dropdown className="text-black">
                             <DropdownTrigger>
                                 <Button>
@@ -85,7 +88,7 @@ export default function Header(props: iHeader) {
                     }
                 </NavbarItem>
             </NavbarContent>
-            <DeleteUserModal userMail={props.user?.mail} isOpen={isModalOpen} closeModal={closeModal} />
+            <DeleteUserModal userMail={user?.mail} isOpen={isModalOpen} closeModal={closeModal} />
         </Navbar>
     );
 }

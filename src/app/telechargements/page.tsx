@@ -1,18 +1,15 @@
 'use client';
 
 import React, { useState, useEffect, Fragment } from 'react';
-import Header from "../components/header/header";
-import { NextUIProvider } from "@nextui-org/system";
 import CustomCard from '../components/customcard/customcard';
-import Footer from '../components/footer/footer';
-import { User } from "../interfaces/user";
 import { decodeAccessToken, fetchDownloadableFiles } from './utils';
 import { Dialog, Transition } from '@headlessui/react';
 import { Button } from '@nextui-org/react';
 import { Alert } from "@mui/material";
+import { useHeader } from '../hooks/useHeader';
 
 const DownloadComponentsPage: React.FC = () => {
-  const [user, setUser] = useState<User | null>(null);
+  const { user, setUser: setUserInHeader, setShowMyAccount, setShowStats, setShowSponsor } = useHeader();
   const [folders, setFolders] = useState<any[]>([]);
   const [selectedFolder, setSelectedFolder] = useState<string | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
@@ -22,7 +19,6 @@ const DownloadComponentsPage: React.FC = () => {
   const [isDownloading, setIsDownloading] = useState(false);
   const [downloadedFilePath, setDownloadedFilePath] = useState<string | null>(null);
   const [showDownloadAlert, setShowDownloadAlert] = useState(false);
-
 
   useEffect(() => {
     const fetchFiles = async () => {
@@ -41,9 +37,12 @@ const DownloadComponentsPage: React.FC = () => {
     const accessToken = localStorage.getItem('accessToken');
     const userData = decodeAccessToken(accessToken);
     if (userData) {
-      setUser(userData);
+      setUserInHeader(userData);
+      setShowMyAccount(true);
+      setShowStats(true);
+      setShowSponsor(true);
     }
-  }, []);
+  }, [setUserInHeader]);
 
   const handleCardClick = async (foldername: string) => {
     setSelectedFolder(foldername);
@@ -123,31 +122,28 @@ const DownloadComponentsPage: React.FC = () => {
   };
 
   return (
-    <NextUIProvider className="flex flex-col min-h-screen bg-beige">
-      <Header user={user} showMyAccount={true} showSponsor={false} />
-      <div className="container mx-auto mt-6 flex-grow">
-        <h1 className="font-bold text-3xl text-black text-center mb-4">Téléchargement des Composants</h1>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
-          {currentItems.map(folder => (
-            <div className='place-self-center' key={folder.foldername}>
-              <CustomCard
-                title={folder.foldername}
-                href="#"
-                onClick={() => handleCardClick(folder.foldername)}
-                btnText={'Voir les fichiers'}
-              />
-            </div>
-          ))}
-        </div>
-        <div className="mt-3 mb-3 flex justify-center items-center space-x-4">
-          <Button className="px-4 py-2 bg-red text-white rounded" onClick={prevPage} isDisabled={currentPage === 1}>
-            Précédent
-          </Button>
-          <span className="mx-4 text-black">{currentPage} / {totalPages}</span>
-          <Button className="px-4 py-2 bg-red text-white rounded" onClick={nextPage} isDisabled={currentPage === totalPages}>
-            Suivant
-          </Button>
-        </div>
+    <div className="container mx-auto mt-6 flex-grow">
+      <h1 className="font-bold text-3xl text-black text-center mb-4">Téléchargement des Composants</h1>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
+        {currentItems.map(folder => (
+          <div className='place-self-center' key={folder.foldername}>
+            <CustomCard
+              title={folder.foldername}
+              href="#"
+              onClick={() => handleCardClick(folder.foldername)}
+              btnText={'Voir les fichiers'}
+            />
+          </div>
+        ))}
+      </div>
+      <div className="mt-3 mb-3 flex justify-center items-center space-x-4">
+        <Button className="px-4 py-2 bg-red text-white rounded" onClick={prevPage} isDisabled={currentPage === 1}>
+          Précédent
+        </Button>
+        <span className="mx-4 text-black">{currentPage} / {totalPages}</span>
+        <Button className="px-4 py-2 bg-red text-white rounded" onClick={nextPage} isDisabled={currentPage === totalPages}>
+          Suivant
+        </Button>
       </div>
       {showDownloadAlert &&
         <Alert
@@ -157,7 +153,6 @@ const DownloadComponentsPage: React.FC = () => {
           Le téléchargement a été mis dans {downloadedFilePath}
         </Alert>
       }
-      <Footer />
       <Transition appear show={modalVisible} as={Fragment}>
         <Dialog
           as='div'
@@ -205,7 +200,7 @@ const DownloadComponentsPage: React.FC = () => {
           </div>
         </Dialog>
       </Transition>
-    </NextUIProvider>
+    </div>
   );
 };
 
