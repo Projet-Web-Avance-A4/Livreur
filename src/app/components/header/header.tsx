@@ -60,7 +60,7 @@ export default function Header() {
                                     <DropdownItem
                                         key="consult"
                                         description="Mes informations"
-                                        href="/account"
+                                        href="/profil"
                                     >
                                         Mon compte
                                     </DropdownItem>
