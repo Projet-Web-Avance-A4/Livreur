@@ -13,6 +13,7 @@ import { useEffect, useState } from "react";
 import { Order } from "../types/order";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import MoonLoader from "react-spinners/MoonLoader";
+import { decodeAccessToken } from "../utils/utils"
 
 export default function Home() {
   const [ordersList, setOrdersList] = useState<Order[]>([]);
@@ -20,10 +21,11 @@ export default function Home() {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const accessToken = localStorage.getItem("accessToken");
-  const decoded: JwtPayload = jwt.verify(
-    accessToken!,
-    "access_secret_jwt"
-  ) as JwtPayload;
+  // const decoded: JwtPayload = jwt.verify(
+  //   accessToken!,
+  //   "access_secret_jwt"
+  // ) as JwtPayload;
+  const decoded = decodeAccessToken(accessToken)
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -46,7 +48,7 @@ export default function Home() {
           (order: Order) =>
             (order.order_status === "En cours de préparation" ||
               order.order_status === "Commande reçue") &&
-            order.driver.driver_id === decoded.userId
+            order.driver.driver_id === decoded?.id_user
         );
         setAssignedOrder(assignedOrder);
       } catch (err) {

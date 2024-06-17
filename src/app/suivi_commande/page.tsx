@@ -10,16 +10,14 @@ import { useEffect, useState } from "react";
 import { Order } from "../types/order";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import MoonLoader from "react-spinners/MoonLoader";
+import { decodeAccessToken } from "../utils/utils";
 
 export default function Home() {
   const [driverOrder, setDriverdOrder] = useState<Order>();
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const accessToken = localStorage.getItem("accessToken");
-  const decoded: JwtPayload = jwt.verify(
-    accessToken!,
-    "access_secret_jwt"
-  ) as JwtPayload;
+  const decoded = decodeAccessToken(accessToken)
 
   useEffect(() => {
     fetchOrders();
@@ -37,7 +35,7 @@ export default function Home() {
       const driverOrder = data.filter(
         (order: Order) =>
           order.order_status !== "Livrée" &&
-          order.driver.driver_id === decoded.userId
+          order.driver.driver_id === decoded?.id_user
       );
       setDriverdOrder(driverOrder[0]);
     } catch (err) {
