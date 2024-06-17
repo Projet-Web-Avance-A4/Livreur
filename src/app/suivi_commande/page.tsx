@@ -20,7 +20,6 @@ export default function Home() {
 
   useEffect(() => {
     fetchOrders();
-    console.log("useEffect")
   }, []);
 
   async function fetchOrders() {
@@ -45,7 +44,6 @@ export default function Home() {
       setError("Failed to fetch orders.");
     } finally {
       setLoading(false)
-      console.log("fetchOrdres finished");
     }
   }
 
