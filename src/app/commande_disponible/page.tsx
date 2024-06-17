@@ -19,34 +19,36 @@ export default function Home() {
   const [assignedOrder, setAssignedOrder] = useState<Order[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const accessToken = localStorage.getItem('accessToken')
-  const decoded: JwtPayload = jwt.verify(accessToken!, 'access_secret_jwt') as JwtPayload;
+  const accessToken = localStorage.getItem("accessToken");
+  const decoded: JwtPayload = jwt.verify(
+    accessToken!,
+    "access_secret_jwt"
+  ) as JwtPayload;
 
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await fetch(
-          "http://localhost:3001/api/order/getOrders",
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
+        const response = await fetch("http://localhost:4000/order/getOrders", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
         const data = await response.json();
         const filteredOrders = data.filter(
           (order: Order) =>
-            (order.order_status === "En cours de préparation" || order.order_status === "Commande reçue") &&
+            (order.order_status === "En cours de préparation" ||
+              order.order_status === "Commande reçue") &&
             order.driver.driver_id === null
         );
         setOrdersList(filteredOrders);
         const assignedOrder = data.filter(
           (order: Order) =>
-            (order.order_status === "En cours de préparation" || order.order_status === "Commande reçue") &&
+            (order.order_status === "En cours de préparation" ||
+              order.order_status === "Commande reçue") &&
             order.driver.driver_id === decoded.userId
         );
-        setAssignedOrder(assignedOrder)
+        setAssignedOrder(assignedOrder);
       } catch (err) {
         console.error(err);
         setError("Failed to fetch orders.");
@@ -104,44 +106,43 @@ export default function Home() {
     <NextUIProvider className="h-screen bg-beige flex flex-col">
       <Header title="Livreur" showMyAccount={true} showStats={false} />
       <main className="container mx-auto flex-grow">
-
-      {loading && 
-      <div className="flex justify-center m-14">
-        <MoonLoader
-        // color={blue}
-        loading={true}
-        // cssOverride={override}
-        size={150}
-        aria-label="Loading Spinner"
-        data-testid="loader"
-      />
-      </div>
-      }
-
-    {assignedOrder.length && !loading &&
-        <Card className="m-8">
-          <CardBody className="text-black flex items-center">
-            <p>Vous avez déjà une commande à réaliser</p> 
-          </CardBody>
-        </Card>}
-
-
-    {!assignedOrder.length && !loading &&
-        <Card className="m-8">
-          <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
-            <h4 className="flex items-center font-bold text-large gap-2">
-              <FaBoxesStacked />
-              Commandes disponibles
-            </h4>
-          </CardHeader>
-          <CardBody>
-            <CustomTable
-              props={props}
-              actionButtons={[ActionButtonValidationOrder]}
+        {loading && (
+          <div className="flex justify-center m-14">
+            <MoonLoader
+              // color={blue}
+              loading={true}
+              // cssOverride={override}
+              size={150}
+              aria-label="Loading Spinner"
+              data-testid="loader"
             />
-          </CardBody>
-        </Card>
-    }
+          </div>
+        )}
+
+        {assignedOrder.length && !loading && (
+          <Card className="m-8">
+            <CardBody className="text-black flex items-center">
+              <p>Vous avez déjà une commande à réaliser</p>
+            </CardBody>
+          </Card>
+        )}
+
+        {!assignedOrder.length && !loading && (
+          <Card className="m-8">
+            <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
+              <h4 className="flex items-center font-bold text-large gap-2">
+                <FaBoxesStacked />
+                Commandes disponibles
+              </h4>
+            </CardHeader>
+            <CardBody>
+              <CustomTable
+                props={props}
+                actionButtons={[ActionButtonValidationOrder]}
+              />
+            </CardBody>
+          </Card>
+        )}
       </main>
       <Footer />
     </NextUIProvider>

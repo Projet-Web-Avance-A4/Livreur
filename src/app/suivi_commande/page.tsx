@@ -16,7 +16,10 @@ export default function Home() {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const accessToken = localStorage.getItem("accessToken");
-  const decoded: JwtPayload = jwt.verify(accessToken!, 'access_secret_jwt') as JwtPayload;
+  const decoded: JwtPayload = jwt.verify(
+    accessToken!,
+    "access_secret_jwt"
+  ) as JwtPayload;
 
   useEffect(() => {
     fetchOrders();
@@ -24,17 +27,15 @@ export default function Home() {
 
   async function fetchOrders() {
     try {
-      const response = await fetch(
-        "http://localhost:3001/api/order/getOrders",
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await fetch("http://localhost:4000/order/getOrders", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
       const data = await response.json();
-      const driverOrder = data.filter((order: Order) =>
+      const driverOrder = data.filter(
+        (order: Order) =>
           order.order_status !== "Livrée" &&
           order.driver.driver_id === decoded.userId
       );
@@ -43,7 +44,7 @@ export default function Home() {
       console.error(err);
       setError("Failed to fetch orders.");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   }
 
@@ -51,7 +52,7 @@ export default function Home() {
     const updateOrderStatus = () => {
       try {
         const response = fetch(
-          "http://localhost:3001/api/order/updateOrderStatus",
+          "http://localhost:4000/order/updateOrderStatus",
           {
             method: "POST",
             headers: {
@@ -63,7 +64,7 @@ export default function Home() {
             }),
           }
         );
-      window.location.reload()
+        window.location.reload();
       } catch (err) {
         console.error(err);
         setError("Failed to update order.");
@@ -78,82 +79,80 @@ export default function Home() {
       <Header title="Livreur" showMyAccount={true} showStats={false} />
 
       <main className="container mx-auto flex-grow">
+        {loading && (
+          <div className="flex justify-center m-14">
+            <MoonLoader
+              // color={blue}
+              loading={loading}
+              // cssOverride={override}
+              size={150}
+              aria-label="Loading Spinner"
+              data-testid="loader"
+            />
+          </div>
+        )}
 
-      {loading && 
-      <div className="flex justify-center m-14">
-        <MoonLoader
-        // color={blue}
-        loading={loading}
-        // cssOverride={override}
-        size={150}
-        aria-label="Loading Spinner"
-        data-testid="loader"
-      />
-      </div>
-      }
-
-      {driverOrder === undefined && !loading && (
-
+        {driverOrder === undefined && !loading && (
           <Card className="m-8">
             <CardBody className="text-black flex items-center">
               <p>Vous n'avez aucune commande en cours.</p>
             </CardBody>
           </Card>
-      )}
+        )}
 
-      {driverOrder !== undefined && !loading && (
-        <div>
-          <div className="flex justify-center">
-            <Suivi order_status={driverOrder?.order_status}></Suivi>
+        {driverOrder !== undefined && !loading && (
+          <div>
+            <div className="flex justify-center">
+              <Suivi order_status={driverOrder?.order_status}></Suivi>
+            </div>
+            <Card className="m-4">
+              <CardBody>
+                <p>
+                  Destination actuelle :{" "}
+                  {driverOrder?.order_status == "En cours de livraison"
+                    ? driverOrder.customer.address.street +
+                      ", " +
+                      driverOrder.customer.address.city
+                    : driverOrder?.restaurant.address.street +
+                      ", " +
+                      driverOrder?.restaurant.address.city}
+                </p>
+              </CardBody>
+            </Card>
+            <Card className="m-4">
+              <CardBody className="flex flex-row justify-evenly">
+                <p>Code : {driverOrder?.verification_code}</p>
+                <p>Montant à payer : {driverOrder?.price} €</p>
+                <p>Méthode de paiement : {driverOrder?.payment.method}</p>
+              </CardBody>
+            </Card>
+            <Card className="m-4">
+              <CardBody className="flex flex-col justify-between items-center">
+                <Button
+                  isDisabled={
+                    driverOrder?.order_status !== "En cours de préparation"
+                  }
+                  className="w-1/2 m-4"
+                  onClick={() => updateOrderStatus("En cours de livraison")}
+                >
+                  <p>Commande en Livraison</p>
+                  {/* Bouton désactivé si état est 'en livraison' */}
+                </Button>
+                <Button
+                  isDisabled={
+                    driverOrder?.order_status !== "En cours de livraison"
+                  }
+                  className="w-1/2 m-4"
+                  onClick={() => updateOrderStatus("Livrée")}
+                >
+                  <p>Commande livrée</p>
+                  {/* Bouton désactivé si état est 'en préparation' */}
+                </Button>
+              </CardBody>
+            </Card>
           </div>
-          <Card className="m-4">
-            <CardBody>
-              <p>
-                Destination actuelle :{" "}
-                {driverOrder?.order_status == "En cours de livraison"
-                  ? driverOrder.customer.address.street +
-                    ", " +
-                    driverOrder.customer.address.city
-                  : driverOrder?.restaurant.address.street +
-                    ", " +
-                    driverOrder?.restaurant.address.city}
-              </p>
-            </CardBody>
-          </Card>
-          <Card className="m-4">
-            <CardBody className="flex flex-row justify-evenly">
-              <p>Code : {driverOrder?.verification_code}</p>
-              <p>Montant à payer : {driverOrder?.price} €</p>
-              <p>Méthode de paiement : {driverOrder?.payment.method}</p>
-            </CardBody>
-          </Card>
-          <Card className="m-4">
-            <CardBody className="flex flex-col justify-between items-center">
-              <Button
-                isDisabled={
-                  driverOrder?.order_status !== "En cours de préparation"
-                }
-                className="w-1/2 m-4"
-                onClick={() => updateOrderStatus("En cours de livraison")}
-              >
-                <p>Commande en Livraison</p>
-                {/* Bouton désactivé si état est 'en livraison' */}
-              </Button>
-              <Button
-                isDisabled={
-                  driverOrder?.order_status !== "En cours de livraison"
-                }
-                className="w-1/2 m-4"
-                onClick={() => updateOrderStatus("Livrée")}
-              >
-                <p>Commande livrée</p>
-                {/* Bouton désactivé si état est 'en préparation' */}
-              </Button>
-            </CardBody>
-          </Card>
-        </div>
-      )}
-     </main> 
+        )}
+      </main>
       <Footer />
     </NextUIProvider>
   );
