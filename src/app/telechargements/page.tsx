@@ -124,7 +124,7 @@ const DownloadComponentsPage: React.FC = () => {
   return (
     <div className="container mx-auto mt-6 flex-grow">
       <h1 className="font-bold text-3xl text-black text-center mb-4">Téléchargement des Composants</h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {currentItems.map(folder => (
           <div className='place-self-center' key={folder.foldername}>
             <CustomCard
