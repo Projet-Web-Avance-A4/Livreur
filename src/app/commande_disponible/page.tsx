@@ -59,6 +59,8 @@ export default function Home() {
     fetchOrders();
   }, []);
 
+  
+
   const INITIAL_VISIBLE_COLUMNS = [
     "adresse_resto",
     "adresse_client",
