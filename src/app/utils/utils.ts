@@ -6,7 +6,7 @@ export const decodeAccessToken = (accessToken: string | null) => {
         if (decodedToken && typeof decodedToken !== 'string') {
             const data: JwtPayload = decodedToken;
             const userData = {
-                id_user: data.id_user ?? '',
+                id_user: data.userId ?? '',
                 name: data.name ?? '',
                 surname: data.surname ?? '',
                 street: data.street ?? '',

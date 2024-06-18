@@ -93,7 +93,7 @@ export default function Home() {
         {driverOrder === undefined && !loading && (
           <Card className="m-8">
             <CardBody className="text-black flex items-center">
-              <p>Vous n'avez aucune commande en cours.</p>
+              <p>Vous n`&apos;`avez aucune commande en cours.</p>
             </CardBody>
           </Card>
         )}
