@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, Fragment } from 'react';
+import { useRouter } from 'next/navigation';
 import CustomCard from '../components/customcard/customcard';
 import { decodeAccessToken, fetchDownloadableFiles } from './utils';
 import { Dialog, Transition } from '@headlessui/react';
@@ -9,7 +10,7 @@ import { Alert } from "@mui/material";
 import { useHeader } from '../hooks/useHeader';
 
 const DownloadComponentsPage: React.FC = () => {
-  const { user, setUser: setUserInHeader, setShowMyAccount, setShowStats, setShowSponsor } = useHeader();
+  const { user, setUser, setShowMyAccount, setShowStats, setShowSponsor } = useHeader();
   const [folders, setFolders] = useState<any[]>([]);
   const [selectedFolder, setSelectedFolder] = useState<string | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
@@ -19,6 +20,33 @@ const DownloadComponentsPage: React.FC = () => {
   const [isDownloading, setIsDownloading] = useState(false);
   const [downloadedFilePath, setDownloadedFilePath] = useState<string | null>(null);
   const [showDownloadAlert, setShowDownloadAlert] = useState(false);
+  const router = useRouter();
+
+  useEffect(() => {
+    const setInHeader = async () => {
+      try {
+        const accessToken = localStorage.getItem('accessToken');
+        if (!accessToken) {
+          throw new Error("Token non trouvé");
+        }
+
+        const userData = await decodeAccessToken(accessToken);
+        setUser(userData);
+
+        if (userData) {
+          setShowMyAccount(true);
+          setShowStats(true);
+          setShowSponsor(true);
+        } else {
+          throw new Error("Utilisateur non connecté");
+        }
+      } catch (error) {
+        router.push('/');
+      }
+    };
+
+    setInHeader();
+  }, []);
 
   useEffect(() => {
     const fetchFiles = async () => {
@@ -33,16 +61,6 @@ const DownloadComponentsPage: React.FC = () => {
     fetchFiles();
   }, []);
 
-  useEffect(() => {
-    const accessToken = localStorage.getItem('accessToken');
-    const userData = decodeAccessToken(accessToken);
-    if (userData) {
-      setUserInHeader(userData);
-      setShowMyAccount(true);
-      setShowStats(true);
-      setShowSponsor(true);
-    }
-  }, [setUserInHeader]);
 
   const handleCardClick = async (foldername: string) => {
     setSelectedFolder(foldername);
@@ -124,7 +142,7 @@ const DownloadComponentsPage: React.FC = () => {
   return (
     <div className="container mx-auto mt-6 flex-grow">
       <h1 className="font-bold text-3xl text-black text-center mb-4">Téléchargement des Composants</h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
         {currentItems.map(folder => (
           <div className='place-self-center' key={folder.foldername}>
             <CustomCard
