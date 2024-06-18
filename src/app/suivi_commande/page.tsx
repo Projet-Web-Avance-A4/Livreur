@@ -16,35 +16,37 @@ export default function Home() {
   const [driverOrder, setDriverdOrder] = useState<Order>();
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const accessToken = localStorage.getItem("accessToken");
-  const decoded = decodeAccessToken(accessToken)
+  // const accessToken = localStorage.getItem("accessToken");
+  // const decoded = decodeAccessToken(accessToken)
 
   useEffect(() => {
+    const accessToken = localStorage.getItem("accessToken");
+    const decoded = decodeAccessToken(accessToken)
+    const fetchOrders = async () => {
+      try {
+        const response = await fetch("http://localhost:4000/order/getOrders", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        const data = await response.json();
+        const driverOrder = data.filter(
+          (order: Order) =>
+            order.order_status !== "Livrée" &&
+            order.driver.driver_id === decoded?.id_user
+        );
+        setDriverdOrder(driverOrder[0]);
+      } catch (err) {
+        console.error(err);
+        setError("Failed to fetch orders.");
+      } finally {
+        setLoading(false);
+      }
+    }
     fetchOrders();
   }, []);
 
-  async function fetchOrders() {
-    try {
-      const response = await fetch("http://localhost:4000/order/getOrders", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      const data = await response.json();
-      const driverOrder = data.filter(
-        (order: Order) =>
-          order.order_status !== "Livrée" &&
-          order.driver.driver_id === decoded?.id_user
-      );
-      setDriverdOrder(driverOrder[0]);
-    } catch (err) {
-      console.error(err);
-      setError("Failed to fetch orders.");
-    } finally {
-      setLoading(false);
-    }
-  }
 
   function updateOrderStatus(newStatus: string) {
     const updateOrderStatus = () => {

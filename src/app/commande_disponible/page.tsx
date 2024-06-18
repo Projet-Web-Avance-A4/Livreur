@@ -11,7 +11,6 @@ import { propsTable } from "@/app/interfaces/table";
 import ActionButtonValidationOrder from "../components/actionButtonTable/actionButtonValidationOrder";
 import { useEffect, useState } from "react";
 import { Order } from "../types/order";
-import jwt, { JwtPayload } from "jsonwebtoken";
 import MoonLoader from "react-spinners/MoonLoader";
 import { decodeAccessToken } from "../utils/utils"
 
@@ -20,14 +19,16 @@ export default function Home() {
   const [assignedOrder, setAssignedOrder] = useState<Order[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const accessToken = localStorage.getItem("accessToken");
+  // const accessToken = localStorage.getItem("accessToken");
   // const decoded: JwtPayload = jwt.verify(
   //   accessToken!,
   //   "access_secret_jwt"
   // ) as JwtPayload;
-  const decoded = decodeAccessToken(accessToken)
+  // const decoded = decodeAccessToken(accessToken)
 
   useEffect(() => {
+    const accessToken = localStorage.getItem("accessToken");
+    const decoded = decodeAccessToken(accessToken)
     const fetchOrders = async () => {
       try {
         const response = await fetch("http://localhost:4000/order/getOrders", {
