@@ -19,6 +19,7 @@ import { useHeader } from '../../hooks/useHeader';
 export default function Header() {
     const { user, showMyAccount, showStats } = useHeader();
     const { isModalOpen, openModal, closeModal } = useModal();
+    const appRole = process.env.NEXT_PUBLIC_APP;
 
     return (
         <Navbar className="bg-red">
@@ -36,7 +37,7 @@ export default function Header() {
                 </Link>
             </NavbarBrand>
             <NavbarContent justify="center">
-                <p>{user?.role || "CES'Eat"}</p>
+                <p>{user?.role || appRole}</p>
             </NavbarContent>
             <NavbarContent justify="end">
                 {showStats && user?.role === 'Restaurateur' &&
