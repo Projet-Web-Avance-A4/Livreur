@@ -57,7 +57,7 @@ export default function Header(props: iHeader) {
     return (
         <Navbar className="bg-red">
             <NavbarBrand>
-                <Link href={"/main"}><p className="font-bold text-inherit ml-2 text-large flex items-center gap-2">
+                <Link href={"/accueil"}><p className="font-bold text-inherit ml-2 text-large flex items-center gap-2">
                     <Image
                         src={ceseat}
                         width={50}
