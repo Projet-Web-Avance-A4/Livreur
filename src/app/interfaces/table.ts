@@ -18,3 +18,8 @@ export interface propsTable {
     items: any[];
     INITIAL_VISIBLE_COLUMNS: string[];
 }
+
+export interface confirmOrderModalProps {
+    isOpen: boolean;
+    closeModal: () => void;
+}
