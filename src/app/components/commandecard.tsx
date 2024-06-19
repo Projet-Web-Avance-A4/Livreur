@@ -15,7 +15,6 @@ interface iCommandeCard {
 // Composant Card
 export default function CommandeCard(props: iCommandeCard) {
   return (
-    <NextUIProvider>
       <Card className="m-4">
         <CardBody className="flex flex-row text-center items-center">
           <div className="m-4 flex flex-col">
@@ -37,6 +36,5 @@ export default function CommandeCard(props: iCommandeCard) {
           </button>
         </CardBody>
       </Card>
-    </NextUIProvider>
   );
 }

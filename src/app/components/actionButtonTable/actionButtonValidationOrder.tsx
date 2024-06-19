@@ -7,7 +7,6 @@ import Link from "next/link";
 export default function ActionButtonValidationOrder(item: any) {
   
   return (
-    <NextUIProvider>
       <Tooltip className="text-black" content="Valider">
         <Button
           as={Link}
@@ -21,6 +20,5 @@ export default function ActionButtonValidationOrder(item: any) {
           <FaCheck className="text-default-400 fill-green-500" />
         </Button>
       </Tooltip>
-    </NextUIProvider>
   );
 }

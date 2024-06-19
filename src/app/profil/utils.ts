@@ -1,4 +1,3 @@
-
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { User } from "../interfaces/user";
 import { ChangeEvent } from "react";
@@ -166,6 +165,7 @@ export const sendModifiedData = async (
         }
     }
 };
+
 export const sendModifiedPassword = async (
     user: User | null,
     oldPassword: string,

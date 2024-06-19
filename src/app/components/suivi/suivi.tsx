@@ -16,7 +16,6 @@ interface Suivi {
 // Composant Card
 export default function Suivi(props: Suivi) {
   return (
-    <NextUIProvider>
       <div className="flex flex-row items-center">
         <div
           className={`m-1 bg-white size-24 rounded-full flex items-center justify-center`}
@@ -114,6 +113,5 @@ export default function Suivi(props: Suivi) {
           />
         </div>
       </div>
-    </NextUIProvider>
   );
 }

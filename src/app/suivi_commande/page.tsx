@@ -71,9 +71,6 @@ export default function Home() {
   }
 
   return (
-    <NextUIProvider className="h-screen bg-beige flex flex-col">
-      <Header title="Livreur" showMyAccount={true} showStats={false} />
-
       <main className="container mx-auto flex-grow">
         {loading && (
           <div className="flex justify-center m-14">
@@ -91,7 +88,7 @@ export default function Home() {
         {driverOrder === undefined && !loading && (
           <Card className="m-8">
             <CardBody className="text-black flex items-center">
-              <p>Vous n`&apos;`avez aucune commande en cours.</p>
+              <p>Vous n&apos;avez aucune commande en cours.</p>
             </CardBody>
           </Card>
         )}
@@ -149,7 +146,5 @@ export default function Home() {
           </div>
         )}
       </main>
-      <Footer />
-    </NextUIProvider>
   );
 }

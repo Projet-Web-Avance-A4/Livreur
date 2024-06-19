@@ -1,14 +1,8 @@
 "use client";
-
-import { NextUIProvider } from "@nextui-org/system";
-import { Card, CardBody, CardHeader } from "@nextui-org/card";
-import Header from "../components/header/header";
-import { Button } from "@nextui-org/button";
+import { Card, CardBody, CardHeader } from "@nextui-org/card";import { Button } from "@nextui-org/button";
 import { useEffect, useState, ChangeEvent } from "react";
 import { Input, Spacer } from "@nextui-org/react";
-import { Alert } from "@mui/material";
-import Footer from "../components/footer/footer";
-import { User, fieldLabels } from "../interfaces/user";
+import { Alert } from "@mui/material";import { User, fieldLabels } from "../interfaces/user";
 import { isUserDataValid, handleTokenVerification, handleInputChange, sendModifiedData, sendModifiedPassword } from "./utils";
 
 export default function AccountInfo() {
@@ -69,8 +63,6 @@ export default function AccountInfo() {
     };
 
     return (
-        <NextUIProvider className="min-h-screen bg-beige flex flex-col justify-between">
-            <Header user={user} showMyAccount={true} showStats={true} />
             <div className="flex flex-grow justify-center items-center">
                 <div className="container mx-auto p-4 md:p-0">
                     <div className="md:flex justify-center">
@@ -241,7 +233,5 @@ export default function AccountInfo() {
                     </div>
                 </div>
             </div>
-            <Footer />
-        </NextUIProvider>
     );
 }
