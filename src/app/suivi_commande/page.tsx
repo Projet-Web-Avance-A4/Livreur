@@ -2,13 +2,12 @@
 
 import { NextUIProvider } from "@nextui-org/system";
 import Header from "../components/header/header";
-import { Card, CardBody, CardHeader } from "@nextui-org/card";
+import { Card, CardBody } from "@nextui-org/card";
 import { Button } from "@nextui-org/button";
 import Suivi from "../components/suivi/suivi";
 import Footer from "../components/footer/footer";
 import { useEffect, useState } from "react";
 import { Order } from "../types/order";
-import jwt, { JwtPayload } from "jsonwebtoken";
 import MoonLoader from "react-spinners/MoonLoader";
 import { decodeAccessToken } from "../utils/utils";
 
@@ -16,8 +15,6 @@ export default function Home() {
   const [driverOrder, setDriverdOrder] = useState<Order>();
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  // const accessToken = localStorage.getItem("accessToken");
-  // const decoded = decodeAccessToken(accessToken)
 
   useEffect(() => {
     const accessToken = localStorage.getItem("accessToken");
@@ -68,7 +65,6 @@ export default function Home() {
       } catch (err) {
         console.error(err);
         setError("Failed to update order.");
-      } finally {
       }
     };
     updateOrderStatus();
