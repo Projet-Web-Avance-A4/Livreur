@@ -1,7 +1,7 @@
 import jwt, { JwtPayload } from "jsonwebtoken";
 
 export default function updateDriver(orderId: string) {
-
+  
   const accessToken = localStorage.getItem('accessToken')
   const decoded: JwtPayload = jwt.verify(accessToken!, 'access_secret_jwt') as JwtPayload;
 
