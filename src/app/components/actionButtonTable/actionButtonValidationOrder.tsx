@@ -9,7 +9,6 @@ export default function ActionButtonValidationOrder(item: any) {
   const router = useRouter()
 
   function handleClick(){
-    console.log(item.id)
     updateDriver(item.id)
     router.push("/suivi_commande")
   }
