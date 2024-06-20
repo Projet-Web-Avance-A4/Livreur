@@ -52,6 +52,6 @@ export type Address = {
     estimated_delivery_time: Date;
     payment: Payment;
     driver: Driver;
-    price: number;
+    total_price: number;
   };
   

@@ -114,7 +114,7 @@ export default function Home() {
           <Card className="m-4">
             <CardBody className="flex flex-row justify-evenly">
               <p>Code : {driverOrder?.verification_code}</p>
-              <p>Montant à payer : {driverOrder?.price} €</p>
+              <p>Montant à payer : {driverOrder?.total_price} €</p>
               <p>Méthode de paiement : {driverOrder?.payment.method}</p>
             </CardBody>
           </Card>

@@ -19,12 +19,6 @@ export default function Home() {
   const [assignedOrder, setAssignedOrder] = useState<Order[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  // const accessToken = localStorage.getItem("accessToken");
-  // const decoded: JwtPayload = jwt.verify(
-  //   accessToken!,
-  //   "access_secret_jwt"
-  // ) as JwtPayload;
-  // const decoded = decodeAccessToken(accessToken)
 
   useEffect(() => {
     const accessToken = localStorage.getItem("accessToken");
@@ -38,12 +32,14 @@ export default function Home() {
           },
         });
         const data = await response.json();
+        console.log("data : ", data)
         const filteredOrders = data.filter(
           (order: Order) =>
             (order.order_status === "in_progress" ||
               order.order_status === "checked") &&
-            order.driver.driver_id === null
+            (order.driver.driver_id === null || !('driver_id' in order.driver))
         );
+        console.log("filteredOrders : ", filteredOrders)
         setOrdersList(filteredOrders);
         const assignedOrder = data.filter(
           (order: Order) =>
