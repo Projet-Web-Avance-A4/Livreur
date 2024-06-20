@@ -12,7 +12,7 @@ import ActionButtonValidationOrder from "../components/actionButtonTable/actionB
 import { useEffect, useState } from "react";
 import { Order } from "../types/order";
 import MoonLoader from "react-spinners/MoonLoader";
-import { decodeAccessToken } from "../utils/utils"
+import { decodeAccessToken } from "../utils/utils";
 
 export default function Home() {
   const [ordersList, setOrdersList] = useState<Order[]>([]);
@@ -28,7 +28,7 @@ export default function Home() {
 
   useEffect(() => {
     const accessToken = localStorage.getItem("accessToken");
-    const decoded = decodeAccessToken(accessToken)
+    const decoded = decodeAccessToken(accessToken);
     const fetchOrders = async () => {
       try {
         const response = await fetch("http://localhost:4000/order/getOrders", {
@@ -40,15 +40,15 @@ export default function Home() {
         const data = await response.json();
         const filteredOrders = data.filter(
           (order: Order) =>
-            (order.order_status === "En cours de préparation" ||
-              order.order_status === "Commande reçue") &&
+            (order.order_status === "in_progress" ||
+              order.order_status === "checked") &&
             order.driver.driver_id === null
         );
         setOrdersList(filteredOrders);
         const assignedOrder = data.filter(
           (order: Order) =>
-            (order.order_status === "En cours de préparation" ||
-              order.order_status === "Commande reçue") &&
+            (order.order_status === "in_progress" ||
+              order.order_status === "checked") &&
             order.driver.driver_id === decoded?.id_user
         );
         setAssignedOrder(assignedOrder);
@@ -61,8 +61,6 @@ export default function Home() {
     };
     fetchOrders();
   }, []);
-
-  
 
   const INITIAL_VISIBLE_COLUMNS = [
     "adresse_resto",
@@ -108,44 +106,44 @@ export default function Home() {
   };
 
   return (
-      <main className="container mx-auto flex-grow">
-        {loading && (
-          <div className="flex justify-center m-14">
-            <MoonLoader
-              // color={blue}
-              loading={true}
-              // cssOverride={override}
-              size={150}
-              aria-label="Loading Spinner"
-              data-testid="loader"
+    <main className="container mx-auto flex-grow">
+      {loading && (
+        <div className="flex justify-center m-14">
+          <MoonLoader
+            // color={blue}
+            loading={true}
+            // cssOverride={override}
+            size={150}
+            aria-label="Loading Spinner"
+            data-testid="loader"
+          />
+        </div>
+      )}
+
+      {assignedOrder.length && !loading && (
+        <Card className="m-8">
+          <CardBody className="text-black flex items-center">
+            <p>Vous avez déjà une commande à réaliser</p>
+          </CardBody>
+        </Card>
+      )}
+
+      {!assignedOrder.length && !loading && (
+        <Card className="m-8">
+          <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
+            <h4 className="flex items-center font-bold text-large gap-2">
+              <FaBoxesStacked />
+              Commandes disponibles
+            </h4>
+          </CardHeader>
+          <CardBody>
+            <CustomTable
+              props={props}
+              actionButtons={[ActionButtonValidationOrder]}
             />
-          </div>
-        )}
-
-        {assignedOrder.length && !loading && (
-          <Card className="m-8">
-            <CardBody className="text-black flex items-center">
-              <p>Vous avez déjà une commande à réaliser</p>
-            </CardBody>
-          </Card>
-        )}
-
-        {!assignedOrder.length && !loading && (
-          <Card className="m-8">
-            <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
-              <h4 className="flex items-center font-bold text-large gap-2">
-                <FaBoxesStacked />
-                Commandes disponibles
-              </h4>
-            </CardHeader>
-            <CardBody>
-              <CustomTable
-                props={props}
-                actionButtons={[ActionButtonValidationOrder]}
-              />
-            </CardBody>
-          </Card>
-        )}
-      </main>
+          </CardBody>
+        </Card>
+      )}
+    </main>
   );
 }

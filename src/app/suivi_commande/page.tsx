@@ -18,7 +18,7 @@ export default function Home() {
 
   useEffect(() => {
     const accessToken = localStorage.getItem("accessToken");
-    const decoded = decodeAccessToken(accessToken)
+    const decoded = decodeAccessToken(accessToken);
     const fetchOrders = async () => {
       try {
         const response = await fetch("http://localhost:4000/order/getOrders", {
@@ -30,7 +30,7 @@ export default function Home() {
         const data = await response.json();
         const driverOrder = data.filter(
           (order: Order) =>
-            order.order_status !== "Livrée" &&
+            order.order_status !== "done" &&
             order.driver.driver_id === decoded?.id_user
         );
         setDriverdOrder(driverOrder[0]);
@@ -40,10 +40,9 @@ export default function Home() {
       } finally {
         setLoading(false);
       }
-    }
+    };
     fetchOrders();
   }, []);
-
 
   function updateOrderStatus(newStatus: string) {
     const updateOrderStatus = () => {
@@ -71,80 +70,76 @@ export default function Home() {
   }
 
   return (
-      <main className="container mx-auto flex-grow">
-        {loading && (
-          <div className="flex justify-center m-14">
-            <MoonLoader
-              // color={blue}
-              loading={loading}
-              // cssOverride={override}
-              size={150}
-              aria-label="Loading Spinner"
-              data-testid="loader"
-            />
-          </div>
-        )}
+    <main className="container mx-auto flex-grow">
+      {loading && (
+        <div className="flex justify-center m-14">
+          <MoonLoader
+            // color={blue}
+            loading={loading}
+            // cssOverride={override}
+            size={150}
+            aria-label="Loading Spinner"
+            data-testid="loader"
+          />
+        </div>
+      )}
 
-        {driverOrder === undefined && !loading && (
-          <Card className="m-8">
-            <CardBody className="text-black flex items-center">
-              <p>Vous n&apos;avez aucune commande en cours.</p>
+      {driverOrder === undefined && !loading && (
+        <Card className="m-8">
+          <CardBody className="text-black flex items-center">
+            <p>Vous n&apos;avez aucune commande en cours.</p>
+          </CardBody>
+        </Card>
+      )}
+
+      {driverOrder !== undefined && !loading && (
+        <div>
+          <div className="flex justify-center">
+            <Suivi order_status={driverOrder?.order_status}></Suivi>
+          </div>
+          <Card className="m-4">
+            <CardBody>
+              <p>
+                Destination actuelle :{" "}
+                {driverOrder?.order_status == "in_delivery"
+                  ? driverOrder.customer.address.street +
+                    ", " +
+                    driverOrder.customer.address.city
+                  : driverOrder?.restaurant.address.street +
+                    ", " +
+                    driverOrder?.restaurant.address.city}
+              </p>
             </CardBody>
           </Card>
-        )}
-
-        {driverOrder !== undefined && !loading && (
-          <div>
-            <div className="flex justify-center">
-              <Suivi order_status={driverOrder?.order_status}></Suivi>
-            </div>
-            <Card className="m-4">
-              <CardBody>
-                <p>
-                  Destination actuelle :{" "}
-                  {driverOrder?.order_status == "En cours de livraison"
-                    ? driverOrder.customer.address.street +
-                      ", " +
-                      driverOrder.customer.address.city
-                    : driverOrder?.restaurant.address.street +
-                      ", " +
-                      driverOrder?.restaurant.address.city}
-                </p>
-              </CardBody>
-            </Card>
-            <Card className="m-4">
-              <CardBody className="flex flex-row justify-evenly">
-                <p>Code : {driverOrder?.verification_code}</p>
-                <p>Montant à payer : {driverOrder?.price} €</p>
-                <p>Méthode de paiement : {driverOrder?.payment.method}</p>
-              </CardBody>
-            </Card>
-            <Card className="m-4">
-              <CardBody className="flex flex-col justify-between items-center">
-                <Button
-                  isDisabled={
-                    driverOrder?.order_status !== "En cours de préparation"
-                  }
-                  className="w-1/2 m-4"
-                  onClick={() => updateOrderStatus("En cours de livraison")}
-                >
-                  <p>Commande en Livraison</p>
-                  {/* Bouton désactivé si état est 'en livraison' */}
-                </Button>
-                <Button
-                  isDisabled={
-                    driverOrder?.order_status !== "En cours de livraison"
-                  }
-                  className="w-1/2 m-4"
-                  onClick={() => updateOrderStatus("Livrée")}
-                >
-                  <p>Commande livrée</p>
-                  {/* Bouton désactivé si état est 'en préparation' */}
-                </Button>
-              </CardBody>
-            </Card>
-          </div>
-        )}
-      </main>
+          <Card className="m-4">
+            <CardBody className="flex flex-row justify-evenly">
+              <p>Code : {driverOrder?.verification_code}</p>
+              <p>Montant à payer : {driverOrder?.price} €</p>
+              <p>Méthode de paiement : {driverOrder?.payment.method}</p>
+            </CardBody>
+          </Card>
+          <Card className="m-4">
+            <CardBody className="flex flex-col justify-between items-center">
+              <Button
+                isDisabled={driverOrder?.order_status !== "in_progress"}
+                className="w-1/2 m-4"
+                onClick={() => updateOrderStatus("in_delivery")}
+              >
+                <p>Commande en Livraison</p>
+                {/* Bouton désactivé si état est 'en livraison' */}
+              </Button>
+              <Button
+                isDisabled={driverOrder?.order_status !== "in_delivery"}
+                className="w-1/2 m-4"
+                onClick={() => updateOrderStatus("done")}
+              >
+                <p>Commande Livrée</p>
+                {/* Bouton désactivé si état est 'en préparation' */}
+              </Button>
+            </CardBody>
+          </Card>
+        </div>
+      )}
+    </main>
   );
 }
